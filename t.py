@@ -227,7 +227,7 @@ class TaskDict(object):
                 tasks[task_id]['prefix'] = prefix
 
         plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
-        for _, task in sorted(tasks.items()):
+        for _, task in sorted(tasks.items(), key=lambda task: task[1]['text']):
             if grep.lower() in task['text'].lower():
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
                 print(p + task['text'])
