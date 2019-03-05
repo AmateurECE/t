@@ -14,7 +14,9 @@ class InvalidTaskfile(Exception):
     pass
 
 class AmbiguousPrefix(Exception):
-    """Raised when trying to use a prefix that could identify multiple tasks."""
+    """
+    Raised when trying to use a prefix that could identify multiple tasks.
+    """
     def __init__(self, prefix):
         super(AmbiguousPrefix, self).__init__()
         self.prefix = prefix
@@ -26,7 +28,9 @@ class UnknownPrefix(Exception):
         self.prefix = prefix
 
 class BadFile(Exception):
-    """Raised when something else goes wrong trying to work with the task file."""
+    """
+    Raised when something else goes wrong trying to work with the task file.
+    """
     def __init__(self, path, problem):
         super(BadFile, self).__init__()
         self.path = path
@@ -226,7 +230,8 @@ class TaskDict(object):
             for task_id, prefix in _prefixes(tasks).items():
                 tasks[task_id]['prefix'] = prefix
 
-        plen = max(map(lambda t: len(t[label]), tasks.values())) if tasks else 0
+        plen = max(map(lambda t: len(t[label]),
+                       tasks.values())) if tasks else 0
         for _, task in sorted(tasks.items(), key=lambda task: task[1]['text']):
             if grep.lower() in task['text'].lower():
                 p = '%s - ' % task[label].ljust(plen) if not quiet else ''
@@ -279,7 +284,8 @@ def _build_parser():
 
     output = OptionGroup(parser, "Output Options")
     output.add_option("-g", "--grep", dest="grep", default='',
-                      help="print only tasks that contain WORD", metavar="WORD")
+                      help="print only tasks that contain WORD",
+                      metavar="WORD")
     output.add_option("-v", "--verbose",
                       action="store_true", dest="verbose", default=False,
                       help="print more detailed output (full task ids, etc)")
@@ -315,11 +321,12 @@ def _main():
             td.write(options.delete)
         else:
             kind = 'tasks' if not options.done else 'done'
-            td.print_list(kind=kind, verbose=options.verbose, quiet=options.quiet,
-                          grep=options.grep)
+            td.print_list(kind=kind, verbose=options.verbose,
+                          quiet=options.quiet, grep=options.grep)
     except AmbiguousPrefix:
         e = sys.exc_info()[1]
-        sys.stderr.write('The ID "%s" matches more than one task.\n' % e.prefix)
+        sys.stderr.write('The ID "%s" matches more than one task.\n'
+                         % e.prefix)
     except UnknownPrefix:
         e = sys.exc_info()[1]
         sys.stderr.write('The ID "%s" does not match any task.\n' % e.prefix)
